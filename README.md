@@ -3,6 +3,7 @@ Custom implementation of the wave function collapse algorithm
 
 ## GENERAL:
 - sacar obfuscacion de OOP / hacerlo una funcion de C simple
+- añadir direcciones
 - Flags:
 ```
 ONFAILURE
