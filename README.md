@@ -2,8 +2,8 @@
 Custom implementation of the wave function collapse algorithm
 
 ## GENERAL:
-[uwu](https://www.youtube.com/watch?v=zIRTOgfsjl0&ab_channel=DVGen)
-[jdh te amo](https://www.youtube.com/watch?v=TO0Tx3w5abQ&ab_channel=jdh)
+- [uwu](https://www.youtube.com/watch?v=zIRTOgfsjl0&ab_channel=DVGen)
+- [jdh te amo](https://www.youtube.com/watch?v=TO0Tx3w5abQ&ab_channel=jdh)
 - sacar obfuscacion de OOP / hacerlo una funcion de C simple
 - añadir direcciones
 - Flags:
