@@ -96,6 +96,8 @@ class WFC
 	using CallBackFn = std::function<void(const Wave&)>;
 
 	// 2D operations
+	// !TODO: optimization + clarity
+
 	template <>
 	struct _VectorUi<2>
 	{
@@ -166,14 +168,12 @@ class WFC
 
 			int c = 0;
 			for (int y = 0, y_ = S; y < S; y++, y_--) {
-				for (int x = 0, x1 = 1; x < S; x++, x1++) {
-
-					int index = (y_ * x1) - 1 + (y * x);
-					//std::cout << '[' << c << "] -> [" << index << "]\n";
-					out.data[c] = pattern.data[index];
-					c++;
-
-				}
+			for (int x = 0, x1 = 1; x < S; x++, x1++) 
+			{
+				int index = (y_ * x1) - 1 + (y * x);
+				out.data[c] = pattern.data[index];
+				c++;
+			}
 			}
 
 			return out;
