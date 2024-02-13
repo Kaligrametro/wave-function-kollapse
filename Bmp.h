@@ -153,6 +153,18 @@ namespace bmp {
 
         // Custom 
         void setPixels(std::vector<Pixel> pixels) { this->m_pixels = pixels; }
+        
+        template <typename T> 
+        void setCastPixels(std::vector<T> pixels) 
+        {
+            this->m_pixels.resize(pixels.size());
+            for (int i = 0; i < pixels.size(); i++)
+            {
+                this->m_pixels[i] = static_cast<bmp::Pixel>(pixels[i]);
+            }
+
+        }
+
         std::vector<Pixel> getData() const { return m_pixels; }
 
 
