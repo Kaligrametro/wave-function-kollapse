@@ -1,3 +1,2 @@
 ### Proyecto en proceso...
-
-- <{@}> Cali <{@}>
+<{@}> Cali
