@@ -376,7 +376,7 @@ class WFC
 		// to access avilable patterns
 		WFC& wfc;
 
-		// where the 
+		// unused
 		Vector size;
 
 		// all elements to-be/already collapsed

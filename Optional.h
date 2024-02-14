@@ -8,6 +8,7 @@
 *                                         - Cali
 */
 namespace std {
+
     extern constexpr void* nullopt = nullptr;
 
     template <typename T>
@@ -17,15 +18,36 @@ namespace std {
         bool m_exists;
         T    m_value;
     public:
-        optional(T value) : m_value(value), m_exists(true) {}
-        optional(void* nullopt) : m_exists(false) {}
-        optional() : m_exists(false) {}
 
-        bool has_value() const { return m_exists; }
-        T    value() { return m_value; }
-        T    value_or(const T& default_value = T()) const { return m_exists ? m_value : default_value; }
+        optional(T value) : 
+            m_value(value), m_exists(true) 
+        {}
+        optional(void* nullopt) : 
+            m_exists(false) 
+        {}
+        optional() : 
+            m_exists(false) 
+        {}
 
-        operator bool() const { return m_exists; }
+        bool has_value() const 
+        { 
+            return m_exists; 
+        }
+
+        T value() 
+        { 
+            return m_value; 
+        }
+
+        T value_or(const T& default_value = T()) const 
+        { 
+            return m_exists ? m_value : default_value; 
+        }
+
+        operator bool() const 
+        { 
+            return m_exists; 
+        }
 
     };
 };
