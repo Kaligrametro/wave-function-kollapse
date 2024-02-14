@@ -10,7 +10,7 @@
 #if 0
 #include <optional>
 #else
-#include "Optional.h"	// custom made std::optional which can be replaced with the original one
+#include "libs/Optional.h"	// custom made std::optional which can be replaced with the original one
 #endif
 
 
@@ -18,7 +18,7 @@
 #if DEBUG
 	#include <iostream>	
 	#include <string>
-	#include "Bmp.h"
+	#include "libs/Bmp.h"
 	using std::cout;
 	using std::cerr;
 	using std::endl;
