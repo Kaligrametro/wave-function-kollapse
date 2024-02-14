@@ -7,6 +7,13 @@
 #include <functional>	// std::function<> & std::hash<>
 #include <cstdlib>		// std::rand
 
+#if 0
+#include <optional>
+#else
+#include "Optional.h"	// custom made std::optional which can be replaced with the original one
+#endif
+
+
 #define DEBUG 1
 #if DEBUG
 	#include <iostream>	
@@ -96,8 +103,6 @@ class WFC
 	using CallBackFn = std::function<void(const Wave&)>;
 
 	// 2D operations
-	// !TODO: optimization + clarity
-
 	template <>
 	struct _VectorUi<2>
 	{
@@ -168,12 +173,14 @@ class WFC
 
 			int c = 0;
 			for (int y = 0, y_ = S; y < S; y++, y_--) {
-			for (int x = 0, x1 = 1; x < S; x++, x1++) 
-			{
-				int index = (y_ * x1) - 1 + (y * x);
-				out.data[c] = pattern.data[index];
-				c++;
-			}
+				for (int x = 0, x1 = 1; x < S; x++, x1++) {
+
+					int index = (y_ * x1) - 1 + (y * x);
+					//std::cout << '[' << c << "] -> [" << index << "]\n";
+					out.data[c] = pattern.data[index];
+					c++;
+
+				}
 			}
 
 			return out;
@@ -345,8 +352,8 @@ class WFC
 
 	struct Element 
 	{
-		// 
-		T value;
+		// value that element represents
+		std::optional<T> value;
 
 		// position of value in wave
 		Vector position;
@@ -354,20 +361,14 @@ class WFC
 		// entropy value
 		float entropy = 0.0f;
 
-		// not collapsed = false, collapsed = true
-		bool collapsed;	// if I had std::optional<> i would use it (x _ x)
-
-		Element() :
-			collapsed(false)
+		Element() 
 		{}
 
 		Element(const Vector& _position) :
-			position(_position),
-			collapsed(false)
+			position(_position)
 		{}
 
 		bool collapse();
-		bool isCollapsed() const { return collapsed; }
 	};
 
 	struct Wave
@@ -389,12 +390,10 @@ class WFC
 			wfc(_wfc),
 			n_collapsed(0)
 		{
-			// reserve wave size
-			this->wave.reserve(this->size.volume());
+			this->wave.reserve(this->size.volume());	// reserve wave size
 
-			// declare elements and set their positions
-			size.iterate([this](size_t x, size_t y) {
-				wave.push_back(Element({ x, y }));
+			size.iterate([this](size_t x, size_t y) {	
+				wave.push_back(Element({ x, y }));		// declare elements and set their positions
 			});
 		}
 
@@ -402,7 +401,7 @@ class WFC
 		{
 			while (this->n_collapsed != this->wave.size())
 			{
-				auto toCollapse = wfc.nextCell(*this);
+
 				n_collapsed++;
 			}
 			return this->wave;
@@ -506,25 +505,23 @@ public:
 			deduplicate(patterns);
 		}
 
-		// DEBUG
+		// WFC DATA
 		OUT("WFC info", ' ');
-		OUT("- Dimension", D);
-		OUT("- Pattern size", S);
-		OUT("- Input size x", input_size.x);
-		OUT("- Input size y", input_size.y);
-		//OUT("- Flag::Rotate", (m_flags & ROTATE));
-		//OUT("- Flag::Reflect", (m_flags & REFLECT));
+		OUT("- Dimension",      D);
+		OUT("- Pattern size",   S);
+		OUT("- Input size x",   input_size.x);
+		OUT("- Input size y",   input_size.y);
 		OUT("- Total patterns", patterns.size());
+		OUT("- Flags", ((flags & ROTATE) ? ((flags & REFLECT) ? "ROTATE, REFLECT":"ROTATE") : ((flags & REFLECT) ? "ROTATE" : "")));	// dios perdoname por esto
 
-		// set patterns
-		this->m_patterns = patterns;
+		this->m_patterns = patterns;	// store patterns
 
 
 		this->onFailure = this->CONTINUE();
 		this->nextCell = this->MIN_ENTROPY();
 		/* TODO */
 		// set functions by flag
-		this->export_patterns(this->m_patterns);
+		//this->export_patterns(this->m_patterns);
 
 	}
 
@@ -549,8 +546,8 @@ public:
 		this->export_image(*this);
 	}
 
-	// Debug member functions
-#if DEBUG
+	// -- DEBUG ONLY --
+	#if DEBUG
 	static void export_patterns(std::vector<Pattern> patterns)
 	{
 		bmp::Bitmap file(S, S);
@@ -564,18 +561,17 @@ public:
 		}
 	}
 
-	static void export_image(const WFC& wfc, const char* filename = "output/output.bmp")
+	static void export_image(const WFC& wfc, const char* path = "output/output.bmp")
 	{
 		bmp::Bitmap file(wfc.output_size.x, wfc.output_size.y);
 		file.setCastPixels(wfc.output);
-		file.save(filename);
+		file.save(path);
 	}
-#else
-	static void export_patterns(std::vector<Pattern> patterns)
-	{
-		throw "Function only available on DEBUG mode";
-	}
-#endif
+	#else
+	// let functions be undefined to avoid compilation
+	static void export_patterns(std::vector<Pattern> patterns);
+	static void export_image(const WFC& wfc, const char* filename = "output/output.bmp");
+	#endif
 private:
 	OnFailureFn CONTINUE()
 	{
@@ -590,11 +586,13 @@ private:
 			float min = 0xffffff;
 			for (auto& e:w.wave)
 			{ 
+				/*
 				if (!e.isCollapsed() && e.entropy < min )
 				{
 					out = &e;
 					min = e.entropy;
 				}
+				*/
 			}
 			return *out;
 		};
