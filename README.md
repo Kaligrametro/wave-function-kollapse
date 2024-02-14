@@ -2,7 +2,7 @@
 by Cali <{@}>
 
 ## Data extraction & generation
-- [X] Analize image
+- [X] Analize input
 - [X] Extract patterns
 - [X] Create pattern permutations
 
@@ -11,3 +11,4 @@ by Cali <{@}>
 - [ ] Collapse wave
 - [ ] Define ONFAILURE functions
 - [ ] Merge waves
+- [ ] Export output
